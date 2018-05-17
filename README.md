@@ -41,8 +41,8 @@ Real example how to use the Docker image to test box image produced by Packer fo
 mkdir ubuntu-18.04-server-amd64
 cd ubuntu-18.04-server-amd64
 docker run --rm -it -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox init peru/ubuntu-18.04-server-amd64
-docker run -e VAGRANT_DEFAULT_PROVIDER=libvirt -p 5999:5999 --rm -it --privileged --cap-add=ALL -v /lib/modules:/lib/modules:ro -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox up
+docker run -e VAGRANT_DEFAULT_PROVIDER=libvirt --rm -it --privileged --cap-add=ALL -v /lib/modules:/lib/modules:ro -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox up
 # or
-docker run -e VAGRANT_DEFAULT_PROVIDER=virtualbox -p 5999:5999 --rm -it --privileged --cap-add=ALL -v /lib/modules:/lib/modules:ro -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox up
+docker run -e VAGRANT_DEFAULT_PROVIDER=virtualbox --rm -it --privileged --cap-add=ALL -v /lib/modules:/lib/modules:ro -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox up
 docker run --rm -it -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox ssh
 ```
