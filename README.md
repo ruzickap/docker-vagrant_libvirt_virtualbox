@@ -1,6 +1,6 @@
 [![Docker Hub; peru/vagrant_libvirt_virtualbox](https://img.shields.io/badge/dockerhub-peru%2Fvagrant_libvirt_virtualbox-green.svg)](https://registry.hub.docker.com/u/peru/vagrant_libvirt_virtualbox)[![](https://images.microbadger.com/badges/image/peru/vagrant_libvirt_virtualbox.svg)](https://microbadger.com/images/peru/vagrant_libvirt_virtualbox)[![Docker pulls](https://img.shields.io/docker/pulls/peru/vagrant_libvirt_virtualbox.svg)](https://hub.docker.com/r/peru/vagrant_libvirt_virtualbox/)[![Docker Build](https://img.shields.io/docker/automated/peru/vagrant_libvirt_virtualbox.svg)](https://hub.docker.com/r/peru/vagrant_libvirt_virtualbox/)
 
-# Dockerfile with Vagrant (+ vagrant-libvirt and vagrant-winrm plugins), QEMU and VirtualBox.
+# Dockerfile with Vagrant (+ vagrant-libvirt and vagrant-winrm plugins), QEMU and VirtualBox
 
 This repository provides Dockerfile which can run Vagrant to start / manipulate VM images.
 
@@ -40,9 +40,9 @@ Real example how to use the Docker image to test box image produced by Packer fo
 ```
 mkdir ubuntu-18.04-server-amd64
 cd ubuntu-18.04-server-amd64
-docker run --rm -it -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox init peru/ubuntu-18.04-server-amd64
-docker run -e VAGRANT_DEFAULT_PROVIDER=libvirt --rm -it --privileged --cap-add=ALL -v /lib/modules:/lib/modules:ro -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox up
+docker run --rm -it -v $PWD/.vagrant.d:/.vagrant.d -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox init peru/ubuntu-18.04-server-amd64
+docker run --rm -it --privileged --net=host -e VAGRANT_DEFAULT_PROVIDER=libvirt -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock -v $HOME/.vagrant.d:/.vagrant.d -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox up
+docker run --rm -it --net=host -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock -v $HOME/.vagrant.d:/.vagrant.d -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox ssh
 # or
-docker run -e VAGRANT_DEFAULT_PROVIDER=virtualbox --rm -it --privileged --cap-add=ALL -v /lib/modules:/lib/modules:ro -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox up
-docker run --rm -it -v $PWD:/var/tmp/box/ peru/vagrant_libvirt_virtualbox ssh
 ```
+
