@@ -47,12 +47,12 @@ cd vagrant_box
 rsync -av --progress company-nb:/var/tmp/packer-templates-images/windows-server-2016-standard-x64-eval-libvirt.box .
 rsync -av --progress company-nb:/var/tmp/packer-templates-images/my_ubuntu-18.04-server-amd64-libvirt.box .
 
-docker run --rm -t -u $(id -u):$(id -g) --net=host \
+docker run --rm -t -u $(id -u):$(id -g) --privileged --net=host \
 -e HOME=/home/docker \
 -v /dev/vboxdrv:/dev/vboxdrv \
 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
 -v $PWD:/home/docker/vagrant \
-docker-vagrant_libvirt_virtualbox set -x \
+peru/vagrant_libvirt_virtualbox set -x \
 && vagrant box add windows-server-2016-standard-x64-eval-libvirt.box --name=windows-server-2016-standard-x64-eval-libvirt --force \
 && vagrant init windows-server-2016-standard-x64-eval-libvirt \
 && vagrant up --provider libvirt \
@@ -62,12 +62,12 @@ docker-vagrant_libvirt_virtualbox set -x \
 && virsh --connect=qemu:///system vol-delete --pool default --vol windows-server-2016-standard-x64-eval-libvirt_vagrant_box_image_0.img \
 && rm -rf {Vagrantfile,.vagrant}
 
-docker run --rm -t -u $(id -u):$(id -g) --net=host \
+docker run --rm -t -u $(id -u):$(id -g) --privileged --net=host \
 -e HOME=/home/docker \
 -v /dev/vboxdrv:/dev/vboxdrv \
 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
 -v $PWD:/home/docker/vagrant \
-docker-vagrant_libvirt_virtualbox set -x \
+peru/vagrant_libvirt_virtualbox set -x \
 && vagrant box add my_ubuntu-18.04-server-amd64-libvirt.box --name=my_ubuntu-18.04-server-amd64-libvirt --force \
 && vagrant init my_ubuntu-18.04-server-amd64-libvirt \
 && vagrant up --provider libvirt \
@@ -77,12 +77,12 @@ docker-vagrant_libvirt_virtualbox set -x \
 && virsh --connect=qemu:///system vol-delete --pool default --vol my_ubuntu-18.04-server-amd64-libvirt_vagrant_box_image_0.img \
 && rm -rf {Vagrantfile,.vagrant}
 
-docker run --rm -t -u $(id -u):$(id -g) --net=host \
+docker run --rm -t -u $(id -u):$(id -g) --privileged --net=host \
 -e HOME=/home/docker \
 -v /dev/vboxdrv:/dev/vboxdrv \
 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
 -v $PWD:/home/docker/vagrant \
-docker-vagrant_libvirt_virtualbox set -x \
+peru/vagrant_libvirt_virtualbox set -x \
 && vagrant box add my_ubuntu-18.04-server-amd64-virtualbox.box --name=my_ubuntu-18.04-server-amd64-virtualbox --force \
 && vagrant init my_ubuntu-18.04-server-amd64-virtualbox \
 && sed -i '/config.vm.box =/a \ \ config.vm.provider "virtualbox" do |v|\n \ \ \ v.gui = false\n\ \ end' Vagrantfile \
@@ -92,7 +92,7 @@ docker-vagrant_libvirt_virtualbox set -x \
 && vagrant box remove my_ubuntu-18.04-server-amd64-virtualbox \
 && rm -rf {Vagrantfile,.vagrant}
 
-docker run --rm -t -u $(id -u):$(id -g) --net=host \
+docker run --rm -t -u $(id -u):$(id -g) --privileged --net=host \
 -e HOME=/home/docker \
 -v /dev/vboxdrv:/dev/vboxdrv \
 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
