@@ -10,7 +10,7 @@ RUN addgroup --gid 1001 docker && \
 # https://github.com/boxboat/fixuid
 RUN set -x \
     && apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl jq libc-dev libvirt-dev openssh-client pkg-config qemu-kvm qemu-utils virtualbox unzip \
+    && apt-get install -y --no-install-recommends ca-certificates curl jq libc-dev libvirt-dev openssh-client pkg-config qemu-kvm qemu-utils sshpass unzip virtualbox \
     \
     && VAGRANT_LATEST_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/vagrant | jq -r -M '.current_version') \
     && curl https://releases.hashicorp.com/vagrant/${VAGRANT_LATEST_VERSION}/vagrant_${VAGRANT_LATEST_VERSION}_x86_64.deb --output /tmp/vagrant_x86_64.deb \
