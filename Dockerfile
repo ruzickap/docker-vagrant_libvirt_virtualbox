@@ -10,7 +10,9 @@ RUN addgroup --gid 1001 docker && \
 # https://github.com/boxboat/fixuid
 RUN set -x \
     && apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl jq libc-dev libvirt-clients libvirt-dev openssh-client pkg-config qemu-kvm qemu-utils rsync sshpass unzip virtualbox \
+    && apt-get install -y --no-install-recommends ca-certificates curl jq libc-dev libvirt-clients libvirt-dev openssh-client pkg-config python3-boto3 python3-cffi-backend python3-jinja2 python3-paramiko python3-pip python3-pyasn1 python3-setuptools python3-wheel python3-winrm python3-yaml qemu-kvm qemu-utils rsync sshpass unzip virtualbox \
+    \
+    && pip3 install ansible \
     \
     && VAGRANT_LATEST_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/vagrant | jq -r -M '.current_version') \
     && curl https://releases.hashicorp.com/vagrant/${VAGRANT_LATEST_VERSION}/vagrant_${VAGRANT_LATEST_VERSION}_x86_64.deb --output /tmp/vagrant_x86_64.deb \
@@ -27,7 +29,7 @@ RUN set -x \
     && mkdir -p /etc/fixuid \
     && printf "user: docker\ngroup: docker\npaths:\n  - /home/docker" > /etc/fixuid/config.yml \
     \
-    && apt-get purge -y curl jq libc-dev libvirt-dev pkg-config unzip \
+    && apt-get purge -y curl jq libc-dev libvirt-dev pkg-config python3-distutils python3-pip python3-setuptools python3-wheel unzip \
     && rm -Rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && apt-get clean
