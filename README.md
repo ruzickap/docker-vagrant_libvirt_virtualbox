@@ -18,6 +18,7 @@ sudo apt install -y --no-install-recommends docker.io virtualbox wget
 sudo gpasswd -a ${USER} docker
 # This is mandatory for Ubuntu otherwise docker container will not have access to /dev/kvm - this is default in Fedora (https://bugzilla.redhat.com/show_bug.cgi?id=993491)
 echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666"' > /etc/udev/rules.d/60-qemu-system-common.rules
+sed -i 's/^unix_sock_/#&/' /etc/libvirt/libvirtd.conf
 sudo reboot
 ```
 
