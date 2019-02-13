@@ -14,11 +14,11 @@ To use this Docker image you need to install VirtualBox and Docker to your OS (F
 
 ```bash
 sudo apt update
-sudo apt install -y --no-install-recommends docker.io virtualbox wget
+sudo apt install -y --no-install-recommends docker.io jq libvirt-bin virtualbox wget
 sudo gpasswd -a ${USER} docker
 # This is mandatory for Ubuntu otherwise docker container will not have access to /dev/kvm - this is default in Fedora (https://bugzilla.redhat.com/show_bug.cgi?id=993491)
-echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666"' > /etc/udev/rules.d/60-qemu-system-common.rules
-sed -i 's/^unix_sock_/#&/' /etc/libvirt/libvirtd.conf
+sudo bash -c "echo 'KERNEL==\"kvm\", GROUP=\"kvm\", MODE=\"0666\"' > /etc/udev/rules.d/60-qemu-system-common.rules"
+sudo sed -i 's/^unix_sock_/#&/' /etc/libvirt/libvirtd.conf
 sudo reboot
 ```
 
@@ -30,7 +30,7 @@ sudo dnf upgrade -y
 # Reboot if necessary (especially if you upgrade the kernel or related packages)
 
 sudo dnf install -y http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-sudo dnf install -y akmod-VirtualBox curl docker git kernel-devel-$(uname -r) libvirt-daemon-kvm wget
+sudo dnf install -y akmod-VirtualBox curl docker git jq kernel-devel-$(uname -r) libvirt-daemon-kvm wget
 sudo akmods
 
 sudo bash -c 'echo "vboxdrv" > /etc/modules-load.d/vboxdrv.conf'
@@ -64,37 +64,37 @@ docker run --rm -t -u $(id -u):$(id -g) --privileged --net=host \
 -v /dev/vboxdrv:/dev/vboxdrv \
 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
 -v $PWD:/home/docker/vagrant \
-peru/vagrant_libvirt_virtualbox set -x \
+peru/vagrant_libvirt_virtualbox "set -x \
 && vagrant box add windows-10-enterprise-x64-eval-libvirt.box --name=windows-10-enterprise-x64-eval-libvirt --force \
 && vagrant init windows-10-enterprise-x64-eval-libvirt \
 && vagrant up --provider libvirt \
-&& vagrant winrm --shell cmd --command 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"' \
+&& vagrant winrm --shell cmd --command 'systeminfo | findstr /B /C:\"OS Name\" /C:\"OS Version\"' \
 && vagrant destroy --force \
 && vagrant box remove windows-10-enterprise-x64-eval-libvirt \
 && virsh --connect=qemu:///system vol-delete --pool default --vol windows-10-enterprise-x64-eval-libvirt_vagrant_box_image_0.img \
-&& rm -rf {Vagrantfile,.vagrant}
+&& rm -rvf Vagrantfile .vagrant"
 
 docker run --rm -t -u $(id -u):$(id -g) --privileged --net=host \
 -e HOME=/home/docker \
 -v /dev/vboxdrv:/dev/vboxdrv \
 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
 -v $PWD:/home/docker/vagrant \
-peru/vagrant_libvirt_virtualbox set -x \
+peru/vagrant_libvirt_virtualbox "set -x \
 && vagrant box add windows-10-enterprise-x64-eval-virtualbox.box --name=windows-10-enterprise-x64-eval-virtualbox --force \
 && vagrant init windows-10-enterprise-x64-eval-virtualbox \
-&& sed -i '/config.vm.box =/a \ \ config.vm.provider "virtualbox" do |v|\n \ \ \ v.gui = false\n\ \ end' Vagrantfile \
+&& sed -i '/config.vm.box =/a \ \ config.vm.provider \"virtualbox\" do |v|\n \ \ \ v.gui = false\n\ \ end' Vagrantfile \
 && vagrant up --provider virtualbox \
-&& vagrant winrm --shell cmd --command 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"' \
+&& vagrant winrm --shell cmd --command 'systeminfo | findstr /B /C:\"OS Name\" /C:\"OS Version\"' \
 && vagrant destroy --force \
 && vagrant box remove windows-10-enterprise-x64-eval-virtualbox \
-&& rm -rf {Vagrantfile,.vagrant}
+&& rm -rvf Vagrantfile .vagrant"
 
 docker run --rm -t -u $(id -u):$(id -g) --privileged --net=host \
 -e HOME=/home/docker \
 -v /dev/vboxdrv:/dev/vboxdrv \
 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
 -v $PWD:/home/docker/vagrant \
-peru/vagrant_libvirt_virtualbox set -x \
+peru/vagrant_libvirt_virtualbox "set -x \
 && vagrant box add ubuntu-18.04-server-amd64-libvirt.box --name=ubuntu-18.04-server-amd64-libvirt --force \
 && vagrant init ubuntu-18.04-server-amd64-libvirt \
 && vagrant up --provider libvirt \
@@ -102,20 +102,21 @@ peru/vagrant_libvirt_virtualbox set -x \
 && vagrant destroy --force \
 && vagrant box remove ubuntu-18.04-server-amd64-libvirt \
 && virsh --connect=qemu:///system vol-delete --pool default --vol ubuntu-18.04-server-amd64-libvirt_vagrant_box_image_0.img \
-&& rm -rf {Vagrantfile,.vagrant}
+&& rm -rf Vagrantfile .vagrant"
 
 docker run --rm -t -u $(id -u):$(id -g) --privileged --net=host \
 -e HOME=/home/docker \
 -v /dev/vboxdrv:/dev/vboxdrv \
 -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
 -v $PWD:/home/docker/vagrant \
-peru/vagrant_libvirt_virtualbox set -x \
+peru/vagrant_libvirt_virtualbox "set -x \
 && vagrant box add ubuntu-18.04-server-amd64-virtualbox.box --name=ubuntu-18.04-server-amd64-virtualbox --force \
 && vagrant init ubuntu-18.04-server-amd64-virtualbox \
-&& sed -i '/config.vm.box =/a \ \ config.vm.provider "virtualbox" do |v|\n \ \ \ v.gui = false\n\ \ end' Vagrantfile \
+&& sed -i '/config.vm.box =/a \ \ config.vm.provider \"virtualbox\" do |v|\n \ \ \ v.gui = false\n\ \ end' Vagrantfile \
 && vagrant up --provider virtualbox \
 && vagrant ssh --command 'grep PRETTY_NAME /etc/os-release; id' \
 && vagrant destroy --force \
 && vagrant box remove ubuntu-18.04-server-amd64-virtualbox \
-&& rm -rf {Vagrantfile,.vagrant}
+&& ls -la && pwd \
+&& rm -rvf Vagrantfile .vagrant"
 ```
