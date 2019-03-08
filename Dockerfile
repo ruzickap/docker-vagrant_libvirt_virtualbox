@@ -10,7 +10,7 @@ RUN addgroup --gid 1001 docker && \
 # https://github.com/boxboat/fixuid
 RUN set -x \
     && apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl jq libc-dev libvirt-clients libvirt-dev openssh-client pkg-config python3-boto3 python3-cffi-backend python3-jinja2 python3-paramiko python3-pip python3-pyasn1 python3-setuptools python3-wheel python3-winrm python3-yaml qemu-kvm qemu-utils rsync sshpass unzip virtualbox-ext-pack virtualbox \
+    && apt-get install -y --no-install-recommends ca-certificates curl jq libc-dev libvirt-clients libvirt-dev openssh-client pkg-config python3-cffi-backend python3-jinja2 python3-paramiko python3-pip python3-pyasn1 python3-setuptools python3-wheel python3-winrm python3-yaml qemu-kvm qemu-utils rsync sshpass unzip virtualbox-ext-pack virtualbox \
     \
     && pip3 install --no-cache-dir ansible \
     \
@@ -19,7 +19,7 @@ RUN set -x \
     && apt-get install --no-install-recommends -y /tmp/vagrant_x86_64.deb \
     && rm /tmp/vagrant_x86_64.deb \
     \
-    && vagrant plugin install vagrant-libvirt vagrant-winrm \
+    && vagrant plugin install vagrant-libvirt \
     && chown -R docker:docker /home/docker \
     \
     && FIXUID_VERSION=$(curl --silent "https://api.github.com/repos/boxboat/fixuid/releases/latest" | sed -n 's/.*"tag_name": "v\([^"]*\)",/\1/p') \
