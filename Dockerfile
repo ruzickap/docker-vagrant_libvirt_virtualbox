@@ -1,8 +1,10 @@
-FROM ubuntu:latest
+FROM ubuntu:18.04
 LABEL MAINTAINER="Petr Ruzicka <petr.ruzicka@gmail.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/docker
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN addgroup --gid 1001 docker && \
     adduser --uid 1001 --ingroup docker --home /home/docker --shell /bin/sh --disabled-password --gecos "" docker
@@ -15,7 +17,7 @@ RUN set -x \
     && pip3 install --no-cache-dir ansible \
     \
     && VAGRANT_LATEST_VERSION=$(curl -s https://checkpoint-api.hashicorp.com/v1/check/vagrant | jq -r -M '.current_version') \
-    && curl -s https://releases.hashicorp.com/vagrant/${VAGRANT_LATEST_VERSION}/vagrant_${VAGRANT_LATEST_VERSION}_x86_64.deb --output /tmp/vagrant_x86_64.deb \
+    && curl -s "https://releases.hashicorp.com/vagrant/${VAGRANT_LATEST_VERSION}/vagrant_${VAGRANT_LATEST_VERSION}_x86_64.deb" --output /tmp/vagrant_x86_64.deb \
     && apt-get install --no-install-recommends -y /tmp/vagrant_x86_64.deb \
     && rm /tmp/vagrant_x86_64.deb \
     \
@@ -23,7 +25,7 @@ RUN set -x \
     && chown -R docker:docker /home/docker \
     \
     && FIXUID_VERSION=$(curl --silent "https://api.github.com/repos/boxboat/fixuid/releases/latest" | sed -n 's/.*"tag_name": "v\([^"]*\)",/\1/p') \
-    && curl -SsL https://github.com/boxboat/fixuid/releases/download/v${FIXUID_VERSION}/fixuid-${FIXUID_VERSION}-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf - \
+    && curl -SsL "https://github.com/boxboat/fixuid/releases/download/v${FIXUID_VERSION}/fixuid-${FIXUID_VERSION}-linux-amd64.tar.gz" | tar -C /usr/local/bin -xzf - \
     && chown root:root /usr/local/bin/fixuid \
     && chmod 4755 /usr/local/bin/fixuid \
     && mkdir -p /etc/fixuid \
@@ -34,7 +36,7 @@ RUN set -x \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && apt-get clean
 
-ADD startup_script.sh /
+COPY startup_script.sh /
 
 USER docker:docker
 

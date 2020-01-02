@@ -1,0 +1,7 @@
+Dockerfile
+libvirt
+plugins
+qemu
+vagrant-libvirt
+vagrant-winrm
+VirtualBox
