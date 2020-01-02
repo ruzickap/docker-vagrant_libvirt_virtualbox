@@ -1,16 +1,23 @@
-# Dockerfile with Vagrant (+ vagrant-libvirt and vagrant-winrm plugins), QEMU and VirtualBox
+# Dockerfile with Vagrant QEMU and VirtualBox
 
-[![Docker Hub; peru/vagrant_libvirt_virtualbox](https://img.shields.io/badge/dockerhub-peru%2Fvagrant_libvirt_virtualbox-green.svg)](https://registry.hub.docker.com/u/peru/vagrant_libvirt_virtualbox)[![Size](https://images.microbadger.com/badges/image/peru/vagrant_libvirt_virtualbox.svg)](https://microbadger.com/images/peru/vagrant_libvirt_virtualbox)[![Docker pulls](https://img.shields.io/docker/pulls/peru/vagrant_libvirt_virtualbox.svg)](https://hub.docker.com/r/peru/vagrant_libvirt_virtualbox/)[![Docker Build](https://img.shields.io/docker/automated/peru/vagrant_libvirt_virtualbox.svg)](https://hub.docker.com/r/peru/vagrant_libvirt_virtualbox/)
+[![Docker Hub; peru/vagrant_libvirt_virtualbox](https://img.shields.io/badge/dockerhub-peru%2Fvagrant_libvirt_virtualbox-green.svg)](https://registry.hub.docker.com/u/peru/vagrant_libvirt_virtualbox)
+[![Size](https://images.microbadger.com/badges/image/peru/vagrant_libvirt_virtualbox.svg)](https://microbadger.com/images/peru/vagrant_libvirt_virtualbox)
+[![Docker pulls](https://img.shields.io/docker/pulls/peru/vagrant_libvirt_virtualbox.svg)](https://hub.docker.com/r/peru/vagrant_libvirt_virtualbox/)
+[![Docker Build](https://img.shields.io/docker/automated/peru/vagrant_libvirt_virtualbox.svg)](https://hub.docker.com/r/peru/vagrant_libvirt_virtualbox/)
 
-This repository provides Dockerfile which can run Vagrant to start / manipulate VM images.
+This repository provides Dockerfile which can run Vagrant (including
+vagrant-libvirt and vagrant-winrm plugins) to start / manipulate VM images.
 
-The docker image is primary created for testing Vagrant images built from Packer Templates located in this repository [https://github.com/ruzickap/packer-templates](https://github.com/ruzickap/packer-templates).
+The docker image is primary created for testing Vagrant images built from Packer
+Templates located in this repository [https://github.com/ruzickap/packer-templates](https://github.com/ruzickap/packer-templates).
 
 ## Installation steps
 
-To use this Docker image you need to install VirtualBox and Docker to your OS (Fedora / Ubuntu). This may work on other operating systems too, but I didn't have a chance to test it.
+To use this Docker image you need to install VirtualBox and Docker to your OS
+(Fedora / Ubuntu). This may work on other operating systems too, but I didn't
+have a chance to test it.
 
-### Ubuntu installation steps (Docker + Virtualbox)
+### Ubuntu installation steps (Docker + VirtualBox)
 
 ```bash
 sudo apt update
@@ -22,7 +29,7 @@ sudo sed -i 's/^unix_sock_/#&/' /etc/libvirt/libvirtd.conf
 sudo reboot
 ```
 
-### Fedora installation steps (Docker + Virtualbox)
+### Fedora installation steps (Docker + VirtualBox)
 
 ```bash
 sudo sed -i 's@^SELINUX=enforcing@SELINUX=disabled@' /etc/selinux/config
@@ -43,7 +50,8 @@ sudo reboot
 
 ## Test box image created from Packer templates
 
-Real example how to use the Docker image to test box image produced by Packer for libvirt/qemu.
+Real example how to use the Docker image to test box image produced by Packer
+for libvirt/qemu.
 
 ```bash
 BOXES="windows-10-enterprise-x64-eval ubuntu-18.04-server-amd64"
