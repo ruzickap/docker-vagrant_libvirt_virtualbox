@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-LABEL MAINTAINER="Petr Ruzicka <petr.ruzicka@gmail.com>"
+LABEL maintainer="Petr Ruzicka <petr.ruzicka@gmail.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV HOME /home/docker
